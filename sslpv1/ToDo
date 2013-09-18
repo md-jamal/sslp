@@ -1,0 +1,11 @@
+
+
+Add a message Format of the Service Type Request and Service Type Reply in the sslp header(Added)
+
+Make changes such that the SA should able to advertise more than one service
+
+Implementing Service Type Request and Service Type Reply
+
+Implementing the sending of those errors in the SLP Code
+
+Comparing the Service Request and Service Reply Implementation with those present in the RFC 2609
