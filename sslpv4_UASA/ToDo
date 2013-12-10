@@ -1,0 +1,64 @@
+change the scope(added)
+
+remove the 2 element bring the third one to above(done)
+
+dont add duplicates in the services one?the code will add the duplicates
+
+Implement the ServiceRegistration and ServiceDeregistration Mechanism(complted)
+
+Service Type Request Message is only receiving once
+
+Discard the duplicate messages received
+
+
+FindService has the problem(solved sending the index with zero which was the error)
+
+Convert the whole text to lower case and then send /register/deregister  a message
+
+Implementation of scope error For SA ( completed)
+
+Implementation of scope error for DA ( completed )
+
+iMplementation of service reply for DA has to be implemented for multiple services
+
+Service Reply Message Header has to be changed to reply with multiple services(Not required memory constrained environment)
+
+If creating a function will take more memory or using an interface.(completed)
+
+	Using interfaces(7828(ROM),580(ram))
+	Using Functions(same . If we use interfaces or not we get the same)
+
+What happens if the scope is default for DA(Implemented)
+
+What happens if the scope is default for SA(Implemented)
+
+If DA is not available we should not renew the registration of the service for SA(Only sending the adverttisement to DA IF No DA is present then dont send it )
+
+What will happen when after some time a DA is available. (He will directly unicast it to the DAs)
+
+If the scope list is omitted,length of the scope list must be set to zero,and all services matching service type are discovered independent of scope list(completed)
+
+What is the size of rpl(RAM:1kb,ROM:7kb)
+
+
+What will happen when  service type is the same both they are present in different scope and user searches for default scope,so he should get the both services.(completed)
+
+Check the retransmissions of the Service Request Message(completed)
+
+If no service reply messages are present then send a signal to the user that no replies are found(completed)
+
+What will happen when another SA register for the same service but with different scope
+	He is just updating which is not the solution(SOLVED)
+
+Based on the scope get the DA Address
+
+As DA has the scope what about the scope of the service which gets registered with the DA	
+	
+
+DA code has to work with the mobile also        
+
+While renewing the registration the fresh flag should not be set     (completed)
+
+
+Multiple scopes may be present in the service request message
+

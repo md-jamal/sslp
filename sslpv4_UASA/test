@@ -1,0 +1,29 @@
+ Test Cases
+
+1.Two-party Discovery(Service Request and Service Reply)
+
+2. Three -party Discovery
+
+3. Sending a Service Registration and getting  a Service Acknowledgement
+
+4. Discovery of DAs
+
+5. Scope based discovery of Services
+
+6. Fresh flag is set on every new SREG
+
+7. Sequence number is set to a unique value for each SREQ message
+
+8. Scope List is omitted,services are discovered independent of scope list
+
+9. Sending a scope error if the scope field in the SSLP message did not match to the scope supported by DA or SA
+
+10. Sending a ILLEGAL REGISTRATION if the SREG has problems
+
+11. Service Location entry may not be cached longer than the Lifetime seconds mentioned in the Lifetime field
+
+12. Service Type Request allows a UA to find all the service types available on the network
+
+13. Service type list is a stringlist field which contains the list of available service types with a SA or a DA.
+
+14. SDER messages are sent to DAs when SAs do not provide their services any more.
