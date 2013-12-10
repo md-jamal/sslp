@@ -1,0 +1,194 @@
+
+
+Test1 :
+
+Discovery of DA When UA and SA get start up(Section 3 of the Draft)
+	
+	There are two ways in which UA and SA may discover DA
+	1.One,they broadcast a SREQ message for the DA service when they start up and receive a DA Advertisement(DAADV)
+
+	+--------+					+--------+
+	|  UA	 |  ---ServiceRequestMessage-->   	|  DA	 |
+	|	 |   <---DA Advertisement----		|	 |
+	+--------+					+--------+
+
+	+--------+					+--------+
+	|  SA	 |  ---ServiceRequestMessage-->   	|  DA	 |
+	|	 |   <---DA Advertisement----		|	 |
+	+--------+					+--------+
+
+
+	2. Two,the DA sends an unsolicited DA advertisement message periodically,which is listened by UAs and SAs.
+
+	+--------+					+--------+
+	|  UA	 |  				   	|  DA	 |
+	|  SA	 |   <---DA Advertisement----		|	 |
+	+--------+					+--------+
+
+
+Test2 :
+
+SSLP allows both the two-party and three-party service discovery mechanisms. (Section 3 of the Draft)
+
+	Two-Party Discovery UA directly issues SREQ to SAs.This mechanism is useful for a small-sized 6LoWPAN because it doesn't
+ 	require the configuration of DAs.In this case UA multicast a SREQ to the entire 6LoWPAN to which it belongs using the
+	link-layer broadcasting scheme
+
+
+	+--------+  <------Multicast ServiceRequest---	+--------+
+	|  SA	 |  				   	|  UA	 |
+	|  	 |   					|	 |
+	+--------+  ------Unicast ServiceReply----->	+--------+
+
+
+
+      Three-Party Discovery , one or more DAs are employed in order to reduce the broadcasting overheads of service request 	  	especially for a large 6LoWPAN. SA send a Service Registration(SREG) containing all the services they advertise to DAs
+      and receive Service Acknowledgment (SACK) in reply.These advertisements must be refreshed with the DA or they expire.
+      UAs unicast SREQ to DAs instead of SAs if any DAs are known.
+
+     
+        +--------+ ----Unicast ServiceRequest---->	+--------+ <---Unicast SrvReg--	+--------+
+	|  UA	 |  				   	|  DA	 |			|  SA	 |
+	|  	 |   					|	 |			|	 |
+	+--------+ <---Unicast ServiceReply-----	+--------+ ----Unicast SrvAck->	+--------+
+
+
+Test3 : (Section 4 of the Draft)
+
+	SAs and UAs must support SREQ,SREP and DADV (completed)
+	SA must also support SREG,SACK and SADV(completed)
+
+
+Test4 :(Section 4 of the Draft)
+	 FRESH is set on every new SREG
+
+
+Test5 : (Section 4 of the Draft)
+
+	The sequence number is set to a unique value for each unique SREQ message.If the request message is retransmitted,the 		same sequence number is used. Replies set the sequence number to the same value as the sequence number in the SREQ 		message.This field is compatible with XID field in SLPv2
+	
+
+Test6 : (Section 4.1 of the Draft)
+	If <scope-list>	field of the Service Request Message is omited,length of the <scope-list > field must be set to zero and 	 all the services matching <service-type> are discovered independently of <Scope-list>
+
+
+Test7 : (Section 4.1 of the Draft)
+	
+	The <service-type> field consists of service type strings. Service Type SHOULD be defined by a "Service Template"[RFC 		2609]
+
+	Service Type has the form:
+	service:<abstract-type>:<concrete-type>
+
+	Whereas the Service URL has the form
+
+	service:<servicetype>://<addrspec>
+	
+	<addrspec> is the hostname or dotted decimal notation for a hostname following by an optional : and port number
+
+	Eg: "service:leds" will match the URL service:leds:ip.
+		But we are using the Service URL of the form :addrspec(because of memory constrained)
+
+
+Test8: (Section 4.1 of the Draft)
+
+	In the presence of one or more DAs,UAs unicast SREQ messages to them, DAs must issue SREP messages in response whether 		they know the location or not
+
+	
+	+--------+  SREQ with service:test scope:cdac	+--------+	Service:	Scope
+	|  UA	 |  ------------------------->   	|  DA	 |	led		embd
+	|	 |  <------------------------		|	 |	sensor		cdac
+	+--------+  SREP with zero entries		+--------+
+
+
+Test9 : (Section 4.2 Of the Draft)
+
+	SCOPE_ERROR: The scope field in SSLP message did not match to the scope supported by DA or SA
+
+	+--------+  SREQ with service:led scope:cdac	+--------+	Service:	Scope
+	|  UA	 |  ------------------------->   	|  DA	 |	led		embd
+	|	 |  <------------------------		|	 |	sensor		cdac
+	+--------+  SREP with SCOPE_ERROR		+--------+
+
+
+
+Test10 : (Section 4.2 of the Draft)
+
+	ILLEGAL_REGISTRATION: The SREG has problems(Zero Lifetime)
+
+
+	+--------+	SREG with zero lifetime		+--------+
+	|  SA	 |  ------------------------>   	|  DA	 |
+	|	 |   <-----------------------		|	 |
+	+--------+	SACK with ILLEGAL_REG		+--------+
+
+Test11 : (Section 4.2 of the Draft)
+
+	SREP message contains zero or more service location entries . If no matching service locations are present in SAs or DAs,
+	the SREP message with zero service location entries is returned in response to a unicast SREQ message.However, a SREP 		message  with zero service location entries MUST NOT be sent in response to a broadcast SREQ message.
+
+	
+	+--------+  SREQ(multicast) with service:temp scope:cdac	+--------+	Service:	Scope:
+	|  UA	 |  --------------------------------------->		|  SA	 |	led		embd
+	|	 |  							|	 |	sensor		cdac
+	+--------+  			(No message)			+--------+
+
+	
+
+Test12 : (Section 4.2 of the Draft)	
+
+	A Service location entry may not be cached longer than the Lifetime seconds mentioned in the lifetime field of the service
+	location entry.
+
+Test13 : (Section 4.3 of the Draft)
+
+	Service Acknowledgment Messages are received in response to the SREG messages.
+
+
+	+--------+	SREG 				+--------+
+	|  SA	 |  ------------------------>   	|  DA	 |
+	|	 |   <-----------------------		|	 |
+	+--------+	SACK 				+--------+
+
+Test14: (Section 4.4 of the Draft)
+	
+	DADV messages is sent in two cases. The error code is set to zero when the DA broadcasts an unsolicited advertisement 		message
+
+
+	+--------+					+--------+
+	|  UA	 |  	Multicast		   	|  DA	 |
+	|  SA	 |   <-------------------		|	 |
+	+--------+	DADV with error code=0		+--------+
+
+
+
+Test15:  (Section 4.4 of the Draft)
+
+	The <scope-list> of the DA includes the scope list provided by the DA. The Scope-list of the DA must not be NULL
+
+Test16: (Section 4.4 of the Draft)
+	
+	In case UAs do not listen to the DADVs,they must discover the  DAs by sending a SREQ message with Service type of 	 		"service:directory-agent"
+
+Test17: (Section 5.1 of the Draft)
+	The service type request allows a UA to find all the service types available on the network
+	In the presence of one or more DAs,UAs unicast STREQ messages to them. DAs must issue Service Type Reply(STREP) messages 	 in response to STREQ messages
+
+
+	+--------+	STREQ 	(Unicast)		+--------+
+	|  UA	 |  ------------------------>   	|  DA	 |
+	|	 |   <-----------------------		|	 |
+	+--------+	STREP				+--------+
+
+
+
+Test18: (Section 5.1 of the Draft)
+
+	In the absence of DAs,STREQ messages are broadcasted over 6LoWPAN and SAs respond with STREP messages
+
+
+	+--------+	STREQ 	(Multicast)		+--------+
+	|  UA	 |  ------------------------>   	|  SA	 |
+	|	 |   <-----------------------		|	 |
+	+--------+	STREP				+--------+
+
+
